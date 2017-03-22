@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Reseptit</h1>
+
+<p>
+    <a href="#" class="btn btn-success">Lisää resepti</a>
+</p>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>reseptin nimi</th>
+            <th>ateriatyyppi</th>
+            <th>pääraaka-aine</th>
+            <th>vaikeustaso</th>
+            <th>valmistusaika</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <!--reseptit-->
+        <tr>
+            <td><a href="/tsoha/recipes/1">Kissanhäntähyytelö</a></td>
+            <td>pääruoka</td>
+            <td>kissa</td>
+            <td><label class="label label-success">helppo</label></td>
+            <td>45min</td>
+            <th><a class="btn btn-default btn-sm" href="/tsoha/recipes/1/edit">Muokkaa</a></th>
+        </tr>
+        <tr>
+            <td><a href="#">Brasilialaiset rullasienet</a></td>
+            <td>alkuruoka</td>
+            <td>rullasieni</td>
+            <td><label class="label label-success">helppo</label></td>
+            <td>15min</td>
+            <th><a class="btn btn-default btn-sm" href="#">Muokkaa</a></th>
+        </tr>
+        <tr>
+            <td><a href="#">Kissa-karpalokiisseli</a></td>
+            <td>jälkiruoka</td>
+            <td>kissa, karpalo</td>
+            <td><label class="label label-primary">normaali</label></td>
+            <td>30min</td>
+            <th><a class="btn btn-default btn-sm" href="#">Muokkaa</a></th>
+        </tr>
+        <tr>
+            <td><a href="#">Taikasienisörsseli</a></td>
+            <td>jälkiruoka</td>
+            <td>taikametsän taikasieni</td>
+            <td><label class="label label-warning">vaikea</label></td>
+            <td>1,25h</td>
+            <th><a class="btn btn-default btn-sm" href="#">Muokkaa</a></th>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

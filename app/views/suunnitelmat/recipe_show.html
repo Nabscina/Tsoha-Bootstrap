@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Kissanhäntähyytelö</h1>
+<!-- Painikkeet tähän -->
+<p>
+    <button class="btn btn-danger">Poista</button> <a href="/tsoha/recipes/1/edit" class="btn btn-default">Muokkaa</a>
+</p>
+<!-- Tiedot tulee listana tähän -->
+<ul>
+    <li><strong>Ateriatyyppi:</strong> pääruoka</li>
+    <li><strong>Pääraaka-aine:</strong> kissa</li>
+    <li><strong>Vaikeustaso:</strong> <label class="label label-success">helppo</label></li>
+    <li><strong>Valmistusaika:</strong> 45min</li>
+    <li><strong>Ainekset:</strong> 300 g kissan häntää, 4 kananmunan valkuaista, 3 valkosipulinkynttä, 1 dl oliiviöljyä, 100 g maustamatonta tuorejuustoa, 1 tl suolaa, 1 dl sokeria</li>
+</ul>
+<div class="checkbox">
+    <label>
+        <input type="checkbox">
+        Lisää aineksia ostoslistaan
+    </label>
+</div>
+<!-- Kuvaus tulee tähän -->
+<p>
+    Lisää kuutioitu häntä kiehuvaan veteen ja keitä n. 10 minuuttia. Lisää valkuaiset, sokeri ja oliiviöljy erilliseen kulhoon ja vatkaa vaahdoksi.
+    Anna seoksen seistä n. 5 minuuttia, ja lisää lopuksi tuorejuusto 25 gramman erissä samalla sekoittaen.
+    Lisää joukkoon häntäkuutiot, hienonnettu valkosipuli ja sokeri. Sekoita, ja anna paistua uunissa 225 asteessa n. 10 minuuttia.
+</p>
+{% endblock %}
