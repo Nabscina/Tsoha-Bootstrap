@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Kissasienikatastrofi</h1>
+<p>
+    <button class="btn btn-danger">Poista</button> <a href="/tsoha/fullcourses/1/edit" class="btn btn-default">Muokkaa</a>
+</p>
+<ul>
+    <li><strong>Alkuruoka:</strong> brasilialaiset rullasienet</li>
+    <li><strong>Pääruoka:</strong><a href="/tsoha/recipes/1"> kissanhäntähyytelö</a></li>
+    <li><strong>Jälkiruoka:</strong> taikasienisörsseli</li>
+    <li><strong>Teema:</strong> juhannus, kesä</li>
+    <li><strong>Juomat:</strong> ranskalainen siniviini, maito</li>
+</ul>
+<div class="checkbox">
+    <label>
+        <input type="checkbox">
+        Lisää aineksia ostoslistaan
+    </label>
+</div>
+<p>
+    Ateriakokonaisuus sopii mainiosti juhannukseen tai muuhun kesäiseen juhlatilaisuuteen. Kattauksessa on suositeltavaa käyttää sinistä tai vihreää astiastoa,
+    sillä se sopii ruokalajien väreihin. Pääruoan kanssa nautitaan lasillinen ranskalaista siniviiniä, mutta myös maito
+    täydentää sen makuja ja on hyvä vaihtoehto lapsille. Kattauksen kruunaa kimppu nokkosia maljakossa.
+</p>
+{% endblock %}

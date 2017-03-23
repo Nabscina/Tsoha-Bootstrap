@@ -24,9 +24,25 @@ class HelloWorldController extends BaseController {
     public static function recipe_show() {
         View::make('suunnitelmat/recipe_show.html');
     }
-    
-        public static function recipe_edit() {
+
+    public static function recipe_edit() {
         View::make('suunnitelmat/recipe_edit.html');
+    }
+
+    public static function login() {
+        View::make('suunnitelmat/login.html');
+    }
+
+    public static function full_courses() {
+        View::make('suunnitelmat/full_courses.html');
+    }
+
+    public static function full_course_show() {
+        View::make('suunnitelmat/full_course_show.html');
+    }
+
+    public static function full_course_edit() {
+        View::make('suunnitelmat/full_course_edit.html');
     }
 
 }
