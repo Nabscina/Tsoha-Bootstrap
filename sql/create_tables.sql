@@ -1,4 +1,4 @@
-CREATE TABLE Kayttaja(id SERIAL PRIMARY KEY, nimi varchar(50) NOT NULL, password varchar(50) NOT NULL);
+CREATE TABLE Kayttaja(id SERIAL PRIMARY KEY, nimi varchar(50) NOT NULL, salasana varchar(50) NOT NULL);
 
 CREATE TABLE Ostoslista(id SERIAL PRIMARY KEY, kayttaja INTEGER REFERENCES Kayttaja(id));
 
