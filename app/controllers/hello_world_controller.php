@@ -9,7 +9,11 @@ class HelloWorldController extends BaseController {
 
     public static function sandbox() {
 
-        View::make('helloworld.html');
+        $ruoka = Recipe::find(45);
+        $ruoat = Recipe::all();
+        
+        Kint::dump($ruoat);
+        Kint::dump($ruoka);
     }
 
     public static function secret() {
@@ -18,31 +22,19 @@ class HelloWorldController extends BaseController {
     }
 
     public static function recipes_list() {
-        View::make('suunnitelmat/recipes_list.html');
+        View::make('recipe/recipes_list.html');
     }
 
     public static function recipe_show() {
-        View::make('suunnitelmat/recipe_show.html');
+        View::make('recipe/recipe_show.html');
     }
 
     public static function recipe_edit() {
-        View::make('suunnitelmat/recipe_edit.html');
+        View::make('recipe/recipe_edit.html');
     }
 
     public static function login() {
-        View::make('suunnitelmat/login.html');
-    }
-
-    public static function full_courses() {
-        View::make('suunnitelmat/full_courses.html');
-    }
-
-    public static function full_course_show() {
-        View::make('suunnitelmat/full_course_show.html');
-    }
-
-    public static function full_course_edit() {
-        View::make('suunnitelmat/full_course_edit.html');
+        View::make('login.html');
     }
 
 }

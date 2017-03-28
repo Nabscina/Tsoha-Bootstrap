@@ -1,7 +1,7 @@
 <?php
 
 $routes->get('/', function() {
-    HelloWorldController::recipes_list();
+    RecipeController::index();
 });
 
 $routes->get('/hiekkalaatikko', function() {
@@ -13,7 +13,7 @@ $routes->get('/supersecret', function() {
 });
 
 $routes->get('/recipes', function() {
-    HelloWorldController::recipes_list();
+    RecipeController::index();
 });
 
 $routes->get('/recipes/1', function() {
@@ -26,16 +26,4 @@ $routes->get('/recipes/1/edit', function() {
 
 $routes->get('/login', function() {
     HelloWorldController::login();
-});
-
-$routes->get('/fullcourses', function() {
-    HelloWorldController::full_courses();
-});
-
-$routes->get('/fullcourses/1', function() {
-    HelloWorldController::full_course_show();
-});
-
-$routes->get('/fullcourses/1/edit', function() {
-    HelloWorldController::full_course_edit();
 });
