@@ -15,6 +15,8 @@ Alkeellisia näkymiä:
 * [Raaka-aineen muokkaussivu](http://pebmatts.users.cs.helsinki.fi/tsoha/ingredients/30/edit)
 * [Raaka-aineen lisäyssivu](http://pebmatts.users.cs.helsinki.fi/tsoha/recipes/7/addingredient)
 
+Tässä vaiheessa ruokalajien lisääminen lisäämissivulla sekä raaka-aineiden lisääminen ja reseptien kirjoittaminen on mahdollista.
+
 ## Työn aihe
 
 [Aiheen kuvaus](http://advancedkittenry.github.io/suunnittelu_ja_tyoymparisto/aiheet/Elektroninen_keittokirja.html) 
