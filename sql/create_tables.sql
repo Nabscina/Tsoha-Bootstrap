@@ -6,6 +6,6 @@ CREATE TABLE Raaka_aine(id SERIAL PRIMARY KEY, kayttaja INTEGER REFERENCES Kaytt
 
 CREATE TABLE Ruokalaji(id SERIAL PRIMARY KEY, kayttaja INTEGER REFERENCES Kayttaja(id), nimi varchar(50) NOT NULL, ateriatyyppi varchar(20), paaraaka_aine varchar(50), vaikeustaso varchar(20), valmistusaika varchar(20), resepti varchar(4000));
 
-CREATE TABLE Ruokalajin_aines(ruokalaji INTEGER REFERENCES Ruokalaji(id), raaka_aine INTEGER REFERENCES Raaka_aine(id), maara varchar(20));
+CREATE TABLE Ruokalajin_aines(ruokalaji INTEGER REFERENCES Ruokalaji(id), raaka_aine INTEGER REFERENCES Raaka_aine(id), nimi varchar(50), maara varchar(20));
 
 CREATE TABLE Ostos(ostoslista INTEGER REFERENCES Ostoslista(id), raaka_aine INTEGER REFERENCES Raaka_aine(id));

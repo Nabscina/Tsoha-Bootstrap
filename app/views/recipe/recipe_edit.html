@@ -1,27 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Muokkaa reseptiä Kissanhäntähyytelö</h1>
+<h1>Muokkaa ruokalajin {{recipe.nimi}} tietoja</h1>
 
 <form>
     <div class="form-group">
         <label>Nimi</label>
-        <input type="text" class="form-control" value="Kissanhäntähyytelö">
+        <input type="text" class="form-control" value={{recipe.nimi}}>
     </div>
     <div class="form-group">
         <label>Ateriatyyppi</label>
-        <input type="text" class="form-control" value="pääruoka">
+        <input type="text" class="form-control" value={{recipe.ateriatyyppi}}>
     </div>
     <div class="form-group">
         <label>Pääraaka-aine</label>
-        <input type="text" class="form-control" value="kissa">
+        <input type="text" class="form-control" value={{recipe.paaraaka_aine}}>
     </div>
     <div class="form-group">
         <label>Vaikeustaso</label>
-        <input type="text" class="form-control" value="helppo">
+        <input type="text" class="form-control" value={{recipe.vaikeustaso}}>
     </div>
     <div class="form-group">
         <label>Valmistusaika</label>
-        <input type="text" class="form-control" value="45min">
+        <input type="text" class="form-control" value={{recipe.valmistusaika}}>
     </div>
 
     <h4>Ainekset</h4>
@@ -36,50 +36,20 @@
                 </tr>
             </thead>
             <tbody>
+                {% for ingredient in ingredients %}
                 <tr>
-                    <td>kissan häntä</td>
-                    <td>300 g</td>
+                    <td>{{ingredient.nimi}}</td>
+                    <td>{{ingredient.maara}}</td>
                     <td><a class="btn btn-default btn-sm" href="#">Muokkaa</a> <a class="btn btn-danger btn-sm" href="#">Poista</a></td>
                 </tr>
-                <tr>
-                    <td>kananmunan valkuainen</td>
-                    <td>4 kpl</td>
-                    <td><a class="btn btn-default btn-sm" href="#">Muokkaa</a> <a class="btn btn-danger btn-sm" href="#">Poista</a></td>
-                </tr>
-                <tr>
-                    <td>valkosipulinkynsi</td>
-                    <td>3 kpl</td>
-                    <td><a class="btn btn-default btn-sm" href="#">Muokkaa</a> <a class="btn btn-danger btn-sm" href="#">Poista</a></td>
-                </tr>
-                <tr>
-                    <td>oliiviöljy</td>
-                    <td>1 dl</td>
-                    <td><a class="btn btn-default btn-sm" href="#">Muokkaa</a> <a class="btn btn-danger btn-sm" href="#">Poista</a></td>
-                </tr>
-                <tr>
-                    <td>maustamaton tuorejuusto</td>
-                    <td>100 g</td>
-                    <td><a class="btn btn-default btn-sm" href="#">Muokkaa</a> <a class="btn btn-danger btn-sm" href="#">Poista</a></td>
-                </tr>
-                <tr>
-                    <td>suola</td>
-                    <td>1 tl</td>
-                    <td><a class="btn btn-default btn-sm" href="#">Muokkaa</a> <a class="btn btn-danger btn-sm" href="#">Poista</a></td>
-                </tr>
-                <tr>
-                    <td>sokeri</td>
-                    <td>1 dl</td>
-                    <td><a class="btn btn-default btn-sm" href="#">Muokkaa</a> <a class="btn btn-danger btn-sm" href="#">Poista</a></td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
 
     <div class="form-group">
         <label>Resepti</label>
-        <textarea class="form-control">    Lisää kuutioitu häntä kiehuvaan veteen ja keitä n. 10 minuuttia. Lisää valkuaiset, sokeri ja oliiviöljy erilliseen kulhoon ja vatkaa vaahdoksi.
-    Anna seoksen seistä n. 5 minuuttia, ja lisää lopuksi tuorejuusto 25 gramman erissä samalla sekoittaen.
-    Lisää joukkoon häntäkuutiot, hienonnettu valkosipuli ja sokeri. Sekoita, ja anna paistua uunissa 225 asteessa n. 10 minuuttia.
+        <textarea class="form-control">{{recipe.resepti}}
         </textarea>
     </div>
 

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Lisää raaka-aine ruokalajille {{recipe.nimi}}</h1>
+
+<form method="post" action="{{base_path}}/recipes/{{recipe.id}}">
+    <div class="form-group">
+        <label>Nimi</label>
+        <input type="text" name="nimi" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label>Hinta</label>
+        <input type="text" name="hinta" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label>Ravitsemustietoja</label>
+        <input type="text" name="ravitsemustiedot" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label>Tarvittava määrä (esim. 500 g, 1 dl...)</label>
+        <input type="text" name="maara" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Lisää</button>
+    </div>
+</form>
+{% endblock %}

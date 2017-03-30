@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Uusi ruokalaji</h1>
+
+<form method="post" action="{{base_path}}/recipes">
+    <div class="form-group">
+        <label>Ruokalajin nimi</label>
+        <input type="text" name="nimi" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label>Ateriatyyppi</label>
+        <input type="text" name="ateriatyyppi" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label>Pääraaka-aine</label>
+        <input type="text" name="paaraaka_aine" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label>Vaikeustaso</label>
+        <input type="text" name="vaikeustaso" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label>Valmistusaika</label>
+        <input type="text" name="valmistusaika" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Lisää</button>
+    </div>
+</form>
+{% endblock %}

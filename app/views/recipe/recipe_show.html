@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Kissanhäntähyytelö</h1>
+<h1>{{recipe.nimi}}</h1>
 <!-- Painikkeet tähän -->
 <p>
-    <button class="btn btn-danger">Poista</button> <a href="/tsoha/recipes/1/edit" class="btn btn-default">Muokkaa</a>
+    <button class="btn btn-danger">Poista</button> <a href="/tsoha/recipes/{{recipe.id}}/edit" class="btn btn-default">Muokkaa</a>
 </p>
 <!-- Tiedot tulee listana tähän -->
 <ul>
-    <li><strong>Ateriatyyppi:</strong> pääruoka</li>
-    <li><strong>Pääraaka-aine:</strong> kissa</li>
-    <li><strong>Vaikeustaso:</strong> helppo</li>
-    <li><strong>Valmistusaika:</strong> 45min</li>
+    <li><strong>Ateriatyyppi:</strong> {{recipe.ateriatyyppi}}</li>
+    <li><strong>Pääraaka-aine:</strong> {{recipe.paaraaka_aine}}</li>
+    <li><strong>Vaikeustaso:</strong> {{recipe.vaikeustaso}}</li>
+    <li><strong>Valmistusaika:</strong> {{recipe.valmistusaika}}</li>
 </ul>
 <h4>Ainekset:</h4>
 <table class="table table-striped table-bordered">
@@ -21,42 +21,23 @@
         </tr>
     </thead>
     <tbody>
+        {% for ingredient in ingredients %}
         <tr>
-            <td>kissan häntä</td>
-            <td>300 g</td>
+            <td><a href="/tsoha/ingredients/{{ingredient.raaka_aine}}">{{ingredient.nimi}}</a></td>
+            <td>{{ingredient.maara}}</td>
         </tr>
-        <tr>
-            <td>kananmunan valkuainen</td>
-            <td>4 kpl</td>
-        </tr>
-        <tr>
-            <td>valkosipulinkynsi</td>
-            <td>3 kpl</td>
-        </tr>
-        <tr>
-            <td>oliiviöljy</td>
-            <td>1 dl</td>
-        </tr>
-        <tr>
-            <td>maustamaton tuorejuusto</td>
-            <td>100 g</td>
-        </tr>
-        <tr>
-            <td>suola</td>
-            <td>1 tl</td>
-        </tr>
-        <tr>
-            <td>sokeri</td>
-            <td>1 dl</td>
-        </tr>
+        {% endfor %}
     </tbody>
 </table>
-<!-- Kuvaus tulee tähän -->
+<p>
+    <a href="/tsoha/recipes/{{recipe.id}}/addingredient" class="btn btn-success">Lisää raaka-aineita</a>
+</p>
 <br>
 <h4>Resepti:</h4>
 <p>
-    Lisää kuutioitu häntä kiehuvaan veteen ja keitä n. 10 minuuttia. Lisää valkuaiset, sokeri ja oliiviöljy erilliseen kulhoon ja vatkaa vaahdoksi.
-    Anna seoksen seistä n. 5 minuuttia, ja lisää lopuksi tuorejuusto 25 gramman erissä samalla sekoittaen.
-    Lisää joukkoon häntäkuutiot, hienonnettu valkosipuli ja sokeri. Sekoita, ja anna paistua uunissa 225 asteessa n. 10 minuuttia.
+    {{recipe.resepti}}
+</p>
+<p>
+    <a href="/tsoha/recipes/{{recipe.id}}/editinstructions" class="btn btn-default">Muokkaa reseptiä</a>
 </p>
 {% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ingredient.nimi}}</h1>
+<p>
+    <a href="/tsoha/ingredients/{{ingredient.id}}/edit" class="btn btn-default">Muokkaa</a>
+</p>
+<ul>
+    <li><strong>Nimi:</strong> {{ingredient.nimi}}</li>
+    <li><strong>Hinta:</strong> {{ingredient.hinta}}</li>
+</ul>
+<h4>Ravitsemustietoja:</h4>
+<p>
+    {{ingredient.ravitsemustiedot}}
+</p>
+{% endblock %}

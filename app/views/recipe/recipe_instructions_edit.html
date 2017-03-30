@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Muokkaa reseptiä {{recipe.nimi}}</h1>
+
+<form method="post" action="{{base_path}}/recipes/instr/{{recipe.id}}">
+
+    <h4>Reseptille lisäämäsi ainekset:</h4>
+
+    <div class="container">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>nimi</th>
+                    <th>määrä</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ingredient in ingredients %}
+                <tr>
+                    <td>{{ingredient.nimi}}</td>
+                    <td>{{ingredient.maara}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="form-group">
+        <label>Resepti</label>
+        <textarea name="resepti" class="form-control">{{recipe.resepti}}
+        </textarea>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Tallenna</button>
+    </div>
+
+</form>
+{% endblock %}
