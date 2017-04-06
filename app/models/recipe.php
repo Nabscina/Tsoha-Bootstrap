@@ -6,6 +6,7 @@ class Recipe extends BaseModel {
 
     public function __construct($attributes) {
         parent::__construct($attributes);
+        $this->validators = array('validateName');
     }
 
     public static function all() {
@@ -71,6 +72,33 @@ class Recipe extends BaseModel {
 
         $query = DB::connection()->prepare('UPDATE Ruokalaji SET resepti = :resepti WHERE id = :id');
         $query->execute(array('resepti' => $recipe, 'id' => $id));
+    }
+
+    public static function updateInfo($id, $recipe) {
+
+        $query = DB::connection()->prepare('UPDATE Ruokalaji SET nimi = :nimi, ateriatyyppi = :ateriatyyppi, paaraaka_aine = :paaraaka_aine, vaikeustaso = :vaikeustaso, valmistusaika = :valmistusaika WHERE id = :id');
+        $query->execute(array('id' => $id, 'nimi' => $recipe['nimi'], 'ateriatyyppi' => $recipe['ateriatyyppi'], 'paaraaka_aine' => $recipe['paaraaka_aine'], 'vaikeustaso' => $recipe['vaikeustaso'], 'valmistusaika' => $recipe['valmistusaika']));
+    }
+
+    public static function destroy($id) {
+
+        $query = DB::connection()->prepare('DELETE FROM Ruokalaji WHERE id = :id');
+        $query->execute(array('id' => $id));
+    }
+
+    public function validateName() {
+
+        $errors = array();
+
+        if ($this->nimi == '' || $this->nimi == null || strlen($this->nimi) < 3) {
+            $errors[] = 'Anna ruokalajillesi vähintään kolmen merkin pituinen nimi.';
+        }
+
+        if (is_numeric($this->nimi)) {
+            $errors[] = 'Ruokalajin nimi ei saa olla täysin numeerinen.';
+        }
+
+        return $errors;
     }
 
 }

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Poistetaanko ruokalaji "{{recipe.nimi}}"?</h1>
+
+<h4>Tätä toimenpidettä ei voi peruuttaa.</h4>
+
+<form method="post" action="{{base_path}}/recipes/{{recipe.id}}/destroy" style="display: inline-block;">
+    <button type="submit" class="btn btn-danger">Poista</button>
+</form>
+{% endblock %}

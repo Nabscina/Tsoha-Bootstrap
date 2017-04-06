@@ -2,30 +2,40 @@
 {% block content %}
 <h1>Uusi ruokalaji</h1>
 
+{% if errors %}
+<div class="alert alert-danger">
+    <ul>
+        {% for error in errors %}
+        <li>{{error}}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
 <form method="post" action="{{base_path}}/recipes">
     <div class="form-group">
         <label>Ruokalajin nimi</label>
-        <input type="text" name="nimi" class="form-control">
+        <input type="text" name="nimi" class="form-control" value="{{attributes.nimi}}">
     </div>
 
     <div class="form-group">
         <label>Ateriatyyppi</label>
-        <input type="text" name="ateriatyyppi" class="form-control">
+        <input type="text" name="ateriatyyppi" class="form-control" value="{{attributes.ateriatyyppi}}">
     </div>
 
     <div class="form-group">
         <label>Pääraaka-aine</label>
-        <input type="text" name="paaraaka_aine" class="form-control">
+        <input type="text" name="paaraaka_aine" class="form-control" value="{{attributes.paaraaka_aine}}">
     </div>
 
     <div class="form-group">
         <label>Vaikeustaso</label>
-        <input type="text" name="vaikeustaso" class="form-control">
+        <input type="text" name="vaikeustaso" class="form-control" value="{{attributes.vaikeustaso}}">
     </div>
 
     <div class="form-group">
         <label>Valmistusaika</label>
-        <input type="text" name="valmistusaika" class="form-control">
+        <input type="text" name="valmistusaika" class="form-control" value="{{attributes.valmistusaika}}">
     </div>
 
     <div class="form-group">

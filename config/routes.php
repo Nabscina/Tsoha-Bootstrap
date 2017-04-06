@@ -32,12 +32,32 @@ $routes->get('/recipes/:id', function($id) {
     RecipeController::showRecipe($id);
 });
 
+$routes->get('/recipes/:id/confirm_deletion', function($id) {
+    RecipeController::confirmDeletion($id);
+});
+
+$routes->post('/recipes/:id/destroy', function($id) {
+    RecipeController::destroyRecipe($id);
+});
+
+$routes->post('/recipes/:id/edit', function($id) {
+    RecipeController::updateRecipeInfo($id);
+});
+
 $routes->get('/recipes/:id/edit', function($id) {
     RecipeController::editRecipe($id);
 });
 
 $routes->get('/ingredients/:id', function($id) {
     IngredientController::showIngredient($id);
+});
+
+$routes->post('/ingredients/:id/edit', function($id) {
+    IngredientController::updateIngredientInfo($id);
+});
+
+$routes->post('/ingredients/:id/destroy', function($id) {
+    IngredientController::destroyIngredient($id);
 });
 
 $routes->get('/ingredients/:id/edit', function($id) {

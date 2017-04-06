@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Muokkaa raaka-ainetta {{ingredient.nimi}}</h1>
+<h1>Muokkaa raaka-ainetta</h1>
 
-<form>
+<form method="post" action="{{base_path}}/ingredients/{{ingredient.id}}/edit">
     <div class="form-group">
         <label>Nimi</label>
-        <input type="text" class="form-control" value={{ingredient.nimi}}>
+        <input type="text" name="nimi" class="form-control" value="{{ingredient.nimi}}">
     </div>
     <div class="form-group">
         <label>Hinta</label>
-        <input type="text" class="form-control" value={{ingredient.hinta}}>
+        <input type="text" name="hinta" class="form-control" value="{{ingredient.hinta}}">
     </div>
 
     <div class="form-group">
         <label>Ravitsemustietoja</label>
-        <textarea class="form-control">{{ingredient.ravitsemustiedot}}
+        <textarea name="ravitsemustiedot" class="form-control">{{ingredient.ravitsemustiedot}}
         </textarea>
     </div>
 

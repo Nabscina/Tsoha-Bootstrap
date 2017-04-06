@@ -1,9 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
+
+{% if message %}
+<div class="alert alert-success">
+    <ul>
+        <li>{{message}}</li>
+    </ul>
+</div>
+{% endif %}
+
 <h1>{{recipe.nimi}}</h1>
 <!-- Painikkeet tähän -->
 <p>
-    <button class="btn btn-danger">Poista</button> <a href="/tsoha/recipes/{{recipe.id}}/edit" class="btn btn-default">Muokkaa</a>
+    <a href="/tsoha/recipes/{{recipe.id}}/confirm_deletion" class="btn btn-danger">Poista</a> <a href="/tsoha/recipes/{{recipe.id}}/edit" class="btn btn-default">Muokkaa</a>
 </p>
 <!-- Tiedot tulee listana tähän -->
 <ul>
@@ -18,6 +27,8 @@
         <tr>
             <th>nimi</th>
             <th>määrä</th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -25,6 +36,10 @@
         <tr>
             <td><a href="/tsoha/ingredients/{{ingredient.raaka_aine}}">{{ingredient.nimi}}</a></td>
             <td>{{ingredient.maara}}</td>
+            <td class="col-sm-1"> <a class="btn btn-default btn-sm center-block" href="{{base_path}}/ingredients/{{ingredient.raaka_aine}}/edit">Muokkaa</a></td>
+            <td class="col-sm-1"> <form method="post" action="{{base_path}}/ingredients/{{ingredient.raaka_aine}}/destroy" style="display: inline-block;">
+                    <button type="submit" class="btn btn-danger">Poista</button>
+                </form></td>
         </tr>
         {% endfor %}
     </tbody>

@@ -6,6 +6,7 @@ class Ingredient extends BaseModel {
 
     public function __construct($attributes) {
         parent::__construct($attributes);
+        $this->validators = array('validateName');
     }
 
     public static function all() {
@@ -48,15 +49,42 @@ class Ingredient extends BaseModel {
         }
         return null;
     }
-    
+
     public function save() {
-        
+
         $query = DB::connection()->prepare('INSERT INTO Raaka_aine (nimi, hinta, ravitsemustiedot) VALUES (:nimi, :hinta, :ravitsemustiedot) RETURNING id');
         $query->execute(array('nimi' => $this->nimi, 'hinta' => $this->hinta, 'ravitsemustiedot' => $this->ravitsemustiedot));
-        
+
         $row = $query->fetch();
-        
+
         $this->id = $row['id'];
+    }
+
+    public static function destroyByRecipe() {
+
+        $query = DB::connection()->prepare('DELETE FROM Raaka_aine WHERE Raaka_aine.id NOT IN (SELECT raaka_aine FROM Ruokalajin_aines)');
+        $query->execute();
+    }
+
+    public static function destroy($id) {
+
+        $query = DB::connection()->prepare('DELETE FROM Raaka_aine WHERE id = :id');
+        $query->execute(array('id' => $id));
+    }
+
+    public function validateName() {
+
+        $errors = array();
+
+        if ($this->nimi == '' || $this->nimi == null || strlen($this->nimi) < 3) {
+            $errors[] = 'Anna raaka-aineelle vähintään kolmen merkin pituinen nimi.';
+        }
+
+        if (is_numeric($this->nimi)) {
+            $errors[] = 'Raaka-aineen nimi ei saa olla täysin numeerinen.';
+        }
+
+        return $errors;
     }
 
 }

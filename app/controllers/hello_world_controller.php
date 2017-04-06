@@ -9,11 +9,17 @@ class HelloWorldController extends BaseController {
 
     public static function sandbox() {
 
-        $ruoka = Recipe::find(45);
-        $ruoat = Recipe::all();
-        
-        Kint::dump($ruoat);
-        Kint::dump($ruoka);
+        $recipe = new Recipe(array(
+            'nimi' => '1234',
+            'ateriatyyppi' => 'joo',
+            'paaraaka_aine' => 'ei',
+            'vaikeustaso' => 'aika vaikee',
+            'valmistusaika' => '55 min',
+            'resepti' => 'kek'
+        ));
+        $errors = $recipe->errors();
+
+        Kint::dump($errors);
     }
 
     public static function secret() {

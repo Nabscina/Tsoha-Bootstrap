@@ -17,7 +17,7 @@ class IngredientController extends BaseController {
     }
 
     public static function addIngredient($id) {
-        
+
         $recipe = Recipe::find($id);
 
         View::make('ingredient/ingredient_new.html', array('recipe' => $recipe));
@@ -43,10 +43,24 @@ class IngredientController extends BaseController {
             'nimi' => $params['nimi'],
             'maara' => $params['maara']
         ));
-        
+
         $recipeIngredient->save();
 
         Redirect::to('/recipes/' . $id, array('message' => 'Raaka-aine lisätty!'));
+    }
+
+    public static function updateIngredientInfo($id) {
+        
+    }
+
+    public static function destroyIngredient($id) {
+        
+        $ruokalajinaines = recipeIngredient::findByIngredient($id);
+
+        recipeIngredient::destroyByIngredient($id);
+        Ingredient::destroy($id);
+
+        Redirect::to('/recipes/' . $ruokalajinaines->ruokalaji, array('message' => 'Raaka-aine poistettu.'));
     }
 
 }
