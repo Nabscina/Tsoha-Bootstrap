@@ -15,7 +15,7 @@ Alkeellisia näkymiä:
 * [Raaka-aineen muokkaussivu](http://pebmatts.users.cs.helsinki.fi/tsoha/ingredients/30/edit)
 * [Raaka-aineen lisäyssivu](http://pebmatts.users.cs.helsinki.fi/tsoha/recipes/7/addingredient)
 
-Tässä vaiheessa ruokalajien lisääminen lisäämissivulla sekä raaka-aineiden lisääminen ja reseptien kirjoittaminen on mahdollista.
+Ohjaaja: valitettavasti kirjautumisen toteuttaminen jää ensi kertaan. Sivuilla voi siis lisäillä ja poistella mielin määrin, tietoa dokumentaatiossa.
 
 ## Työn aihe
 
