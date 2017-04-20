@@ -8,7 +8,8 @@ class User extends BaseModel {
         parent::__construct($attributes);
     }
 
-    //etsitään tietokannasta käyttäjä tällä nimellä ja salasanalla
+    //etsitään tietokannasta käyttäjä tällä nimellä ja salasanalla ja jos löytyy,
+    //kirjautuminen hyväksytään ja palautetaan User-olio, muuten null.
     public static function authenticate($username, $password) {
 
         $query = DB::connection()->prepare('SELECT * FROM Kayttaja WHERE nimi = :nimi AND salasana = :salasana LIMIT 1');
@@ -26,6 +27,8 @@ class User extends BaseModel {
         return null;
     }
 
+    //etsitään käyttäjää tällä id:llä. Jos löytyy, palautetaan User-olio,
+    //muuten null.
     public static function find($id) {
 
         $query = DB::connection()->prepare('SELECT * FROM Kayttaja WHERE id = :id LIMIT 1');
