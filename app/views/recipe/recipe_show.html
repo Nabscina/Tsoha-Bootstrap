@@ -36,9 +36,9 @@
         <tr>
             <td><a href="/tsoha/ingredients/{{ingredient.raaka_aine}}">{{ingredient.nimi}}</a></td>
             <td>{{ingredient.maara}}</td>
-            <td class="col-sm-1"> <a class="btn btn-default btn-sm center-block" href="{{base_path}}/ingredients/{{ingredient.raaka_aine}}/edit">Muokkaa</a></td>
-            <td class="col-sm-1"> <form method="post" action="{{base_path}}/ingredients/{{ingredient.raaka_aine}}/destroy" style="display: inline-block;">
-                    <button type="submit" class="btn btn-danger">Poista</button>
+            <td class="col-sm-1"> <a class="btn btn-default btn-sm center-block" href="{{base_path}}/ingredients/{{ingredient.raaka_aine}}/editamount">Muokkaa</a></td>
+            <td class="col-sm-1"> <form method="post" action="{{base_path}}/ingredients/{{ingredient.raaka_aine}}/destroy">
+                    <button type="submit" class="btn btn-danger btn-sm center-block">Poista</button>
                 </form></td>
         </tr>
         {% endfor %}
@@ -49,9 +49,11 @@
 </p>
 <br>
 <h4>Resepti:</h4>
-<p>
-    {{recipe.resepti}}
-</p>
+<div>
+    <ul>
+        <li>{{recipe.resepti}}</li>
+    </ul>
+</div>
 <p>
     <a href="/tsoha/recipes/{{recipe.id}}/editinstructions" class="btn btn-default">Muokkaa reseptiä</a>
 </p>

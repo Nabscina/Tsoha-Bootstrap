@@ -8,12 +8,12 @@ $routes->post('/recipes', function() {
     RecipeController::store();
 });
 
-$routes->get('/recipes/newrecipe', function() {
-    RecipeController::newRecipe();
-});
-
 $routes->post('/recipes/:id', function($id) {
     IngredientController::store($id);
+});
+
+$routes->get('/recipes/newrecipe', function() {
+    RecipeController::newRecipe();
 });
 
 $routes->get('/recipes/:id/addingredient', function($id) {
@@ -56,6 +56,14 @@ $routes->post('/ingredients/:id/edit', function($id) {
     IngredientController::updateIngredientInfo($id);
 });
 
+$routes->get('/ingredients/:id/editamount', function($id) {
+    IngredientController::editIngredientAmount($id);
+});
+
+$routes->post('/ingredients/:id/editamount', function($id) {
+    IngredientController::updateIngredientNameAndAmount($id);
+});
+
 $routes->post('/ingredients/:id/destroy', function($id) {
     IngredientController::destroyIngredient($id);
 });
@@ -77,5 +85,13 @@ $routes->get('/recipes', function() {
 });
 
 $routes->get('/login', function() {
-    HelloWorldController::login();
+    UserController::login();
+});
+
+$routes->post('/login', function() {
+    UserController::handle_login();
+});
+
+$routes->post('/logout', function() {
+    UserController::logout();
 });

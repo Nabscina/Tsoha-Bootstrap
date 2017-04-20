@@ -1,8 +1,18 @@
 {% extends "base.html" %}
 {% block content %}
+
+{% if message %}
+<div class="alert alert-success">
+    <ul>
+        <li>{{message}}</li>
+    </ul>
+</div>
+{% endif %}
+
 <h1>{{ingredient.nimi}}</h1>
 <p>
     <a href="/tsoha/ingredients/{{ingredient.id}}/edit" class="btn btn-default">Muokkaa</a>
+    <a href="/tsoha/recipes/{{recipe}}" class="btn btn-default">Takaisin</a>
 </p>
 <ul>
     <li><strong>Nimi:</strong> {{ingredient.nimi}}</li>

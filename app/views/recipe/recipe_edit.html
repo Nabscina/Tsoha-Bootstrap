@@ -19,7 +19,19 @@
     </div>
     <div class="form-group">
         <label>Ateriatyyppi</label>
-        <input type="text" name="ateriatyyppi" class="form-control" value="{{recipe.ateriatyyppi}}">
+        <select value="{{recipe.ateriatyyppi}}" class="form-control" name="ateriatyyppi">
+            <option value="alkuruoka">alkuruoka</option>
+            <option value="pääruoka">pääruoka</option>
+            <option value="jälkiruoka">jälkiruoka</option>
+            <option value="aamupala">aamupala</option>
+            <option value="välipala">välipala</option>
+            <option value="iltapala">iltapala</option>
+            <option value="lisuke">lisuke</option>
+            <option value="leivonnainen">leivonnainen</option>
+            <option value="keitto">keitto</option>
+            <option value="salaatti">salaatti</option>
+            <option value="juoma">juoma</option>
+        </select>
     </div>
     <div class="form-group">
         <label>Pääraaka-aine</label>
@@ -27,15 +39,20 @@
     </div>
     <div class="form-group">
         <label>Vaikeustaso</label>
-        <input type="text" name="vaikeustaso" class="form-control" value="{{recipe.vaikeustaso}}">
+        <select value="{{recipe.vaikeustaso}}" class="form-control" name="vaikeustaso">
+            <option value="hyvin helppo">hyvin helppo</option>
+            <option value="helppo">helppo</option>
+            <option value="keskitasoa">keskitasoa</option>
+            <option value="vaativa">vaativa</option>
+        </select>
     </div>
     <div class="form-group">
         <label>Valmistusaika</label>
         <input type="text" name="valmistusaika" class="form-control" value="{{recipe.valmistusaika}}">
     </div>
 
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Tallenna</button>
+    <div         class="form-group">
+        <button type="submit" class="btn btn-primary    ">Tallenna</button>
     </div>
 
 </form>

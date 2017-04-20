@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Muokkaa raaka-aineen tietoja</h1>
+<h1>Muokkaa raaka-aineen nimeä ja määrää</h1>
 
 {% if errors %}
 <div class="alert alert-danger">
@@ -12,20 +12,14 @@
 </div>
 {% endif %}
 
-<form method="post" action="{{base_path}}/ingredients/{{ingredient.id}}/edit">
+<form method="post" action="{{base_path}}/ingredients/{{ingredient.id}}/editamount">
     <div class="form-group">
         <label>Nimi</label>
         <input type="text" name="nimi" class="form-control" value="{{ingredient.nimi}}">
     </div>
     <div class="form-group">
-        <label>Hinta</label>
-        <input type="text" name="hinta" class="form-control" value="{{ingredient.hinta}}">
-    </div>
-
-    <div class="form-group">
-        <label>Ravitsemustietoja</label>
-        <textarea name="ravitsemustiedot" class="form-control">{{ingredient.ravitsemustiedot}}
-        </textarea>
+        <label>Määrä</label>
+        <input type="text" name="maara" class="form-control" value="{{recipeingredient.maara}}">
     </div>
 
     <div class="form-group">

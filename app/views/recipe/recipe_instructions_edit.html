@@ -1,6 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Muokkaa reseptiä {{recipe.nimi}}</h1>
+
+{% if errors %}
+<div class="alert alert-danger">
+    <ul>
+        {% for error in errors %}
+        <li>{{error}}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<h1>Muokkaa ruokalajin {{recipe.nimi}} reseptiä</h1>
 
 <form method="post" action="{{base_path}}/recipes/instr/{{recipe.id}}">
 
@@ -27,7 +38,7 @@
 
     <div class="form-group">
         <label>Resepti</label>
-        <textarea name="resepti" class="form-control">{{recipe.resepti}}
+        <textarea name="resepti" value="{{instructions}}" class="form-control">{{instructions}}
         </textarea>
     </div>
 

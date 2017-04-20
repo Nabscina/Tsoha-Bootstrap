@@ -5,18 +5,33 @@ class IngredientController extends BaseController {
     public static function showIngredient($id) {
 
         $ingredient = Ingredient::find($id);
+        $ri = recipeIngredient::findByIngredient($id);
 
-        View::make('ingredient/ingredient_show.html', array('ingredient' => $ingredient, 'id' => $id));
+        View::make('ingredient/ingredient_show.html', array('ingredient' => $ingredient, 'id' => $id, 'recipe' => $ri->ruokalaji));
     }
 
     public static function editIngredient($id) {
+
+        self::check_logged_in();
 
         $ingredient = Ingredient::find($id);
 
         View::make('ingredient/ingredient_edit.html', array('ingredient' => $ingredient));
     }
 
+    public static function editIngredientAmount($id) {
+
+        self::check_logged_in();
+
+        $ingredient = Ingredient::find($id);
+        $recipeingredient = recipeIngredient::findByIngredient($id);
+
+        View::make('ingredient/ingredient_edit_amount.html', array('ingredient' => $ingredient, 'recipeingredient' => $recipeingredient));
+    }
+
     public static function addIngredient($id) {
+
+        self::check_logged_in();
 
         $recipe = Recipe::find($id);
 
@@ -25,42 +40,124 @@ class IngredientController extends BaseController {
 
     public static function store($id) {
 
+        self::check_logged_in();
+
         $params = $_POST;
 
-        $ingredient = new Ingredient(array(
+        $attributes = array(
             'nimi' => $params['nimi'],
             'hinta' => $params['hinta'],
             'ravitsemustiedot' => $params['ravitsemustiedot']
-        ));
+        );
 
-        $ingredient->save();
+        $ingredient = new Ingredient($attributes);
 
-        $ingredientId = $ingredient->id;
-
-        $recipeIngredient = new recipeIngredient(array(
+        $recipeingredient = new recipeIngredient(array(
             'ruokalaji' => $id,
-            'raaka_aine' => $ingredientId,
             'nimi' => $params['nimi'],
             'maara' => $params['maara']
         ));
 
-        $recipeIngredient->save();
+        $errors = array_merge($ingredient->errors(), $recipeingredient->errors());
 
-        Redirect::to('/recipes/' . $id, array('message' => 'Raaka-aine lisätty!'));
+        $test = self::recipeIngredientCheck($id, $attributes);
+
+        if (!$test && count($errors) == 0) {
+            $ingredient->save();
+            $recipeingredient->raaka_aine = $ingredient->id;
+            $recipeingredient->save();
+            Redirect::to('/recipes/' . $id, array('message' => 'Raaka-aine lisätty!'));
+        } else if (count($errors) == 0) {
+            Redirect::to('/recipes/' . $id, array('message' => 'Raaka-aine lisätty!'));
+        } else {
+            $recipe = Recipe::find($id);
+            View::make('ingredient/ingredient_new.html', array('errors' => $errors, 'ingredient' => $ingredient, 'recipeingredient' => $recipeingredient, 'recipe' => $recipe));
+        }
     }
 
     public static function updateIngredientInfo($id) {
-        
+
+        self::check_logged_in();
+
+        $params = $_POST;
+
+        $attributes = array(
+            'nimi' => $params['nimi'],
+            'hinta' => $params['hinta'],
+            'ravitsemustiedot' => $params['ravitsemustiedot']
+        );
+
+        $ingredient = new Ingredient($attributes);
+        $errors = $ingredient->errors();
+
+        if (count($errors) == 0) {
+            recipeIngredient::editName($id, $attributes['nimi']);
+            Ingredient::edit($id, $attributes['nimi'], $attributes['hinta'], $attributes['ravitsemustiedot']);
+            Redirect::to('/ingredients/' . $id, array('message' => 'Muutokset tallennettu.'));
+        } else {
+            $ingredient = Ingredient::find($id);
+            View::make('ingredient/ingredient_edit.html', array('errors' => $errors, 'ingredient' => $ingredient));
+        }
+    }
+
+    public static function updateIngredientNameAndAmount($id) {
+
+        self::check_logged_in();
+
+        $params = $_POST;
+
+        $riattributes = array('nimi' => $params['nimi'],
+            'maara' => $params['maara']);
+
+        $iattributes = array('nimi' => $params['nimi'],
+            'hinta' => '1000e');
+
+        $ri = new recipeIngredient($riattributes);
+        $i = new Ingredient($iattributes);
+        $errors = array_merge($ri->errors(), $i->errors());
+
+        $recipeingredient = recipeIngredient::findByIngredient($id);
+
+        if (count($errors) == 0) {
+            recipeIngredient::editByIngredient($id, $params['nimi'], $params['maara']);
+            Ingredient::editName($id, $params['nimi']);
+            Redirect::to('/recipes/' . $recipeingredient->ruokalaji, array('message' => 'Muutokset tallennettu.'));
+        } else {
+            $ingredient = new Ingredient(array('id' => $id, 'nimi' => $params['nimi']));
+            $recipeingredient = new RecipeIngredient(array('maara' => $params['maara']));
+            View::make('ingredient/ingredient_edit_amount.html', array('errors' => $errors, 'ingredient' => $ingredient, 'recipeingredient' => $recipeingredient));
+        }
     }
 
     public static function destroyIngredient($id) {
-        
-        $ruokalajinaines = recipeIngredient::findByIngredient($id);
+
+        self::check_logged_in();
+
+        $recipeingredient = recipeIngredient::findByIngredient($id);
+        $idred = $recipeingredient->ruokalaji;
 
         recipeIngredient::destroyByIngredient($id);
         Ingredient::destroy($id);
+        
+        $recipe = Recipe::find($idred);
 
-        Redirect::to('/recipes/' . $ruokalajinaines->ruokalaji, array('message' => 'Raaka-aine poistettu.'));
+        Redirect::to('/recipes/' . $idred, array('message' => 'Raaka-aine poistettu.', 'recipe' => $recipe));
+    }
+
+    public static function recipeIngredientCheck($id, $attributes) {
+
+        $ret = null;
+
+        $ingredients = recipeIngredient::findAllIngredientsByRecipe($id);
+
+        foreach ($ingredients as $ingredient) {
+            if ($ingredient->kayttaja == self::get_user_logged_in()->id) {
+                if ($ingredient->nimi === $attributes['nimi']) {
+                    $ret = $ingredient;
+                }
+            }
+        }
+        return $ret;
     }
 
 }
