@@ -9,6 +9,8 @@ class Ingredient extends BaseModel {
         $this->validators = array('validateName', 'validatePrice', 'validateInfo');
     }
 
+    //listataan kaikki tietokannan raaka-aineet, palautetaan taulukkona
+    //Ingredient-olioita.
     public static function all() {
 
         $query = DB::connection()->prepare('SELECT * FROM Raaka_aine');
@@ -31,6 +33,8 @@ class Ingredient extends BaseModel {
         return $ingredients;
     }
 
+    //etsitään tietokannasta raaka-aine tällä id:llä, palautetaan Ingredient-olio,
+    //jos löytyi, muuten null.
     public static function find($id) {
 
         $query = DB::connection()->prepare('SELECT * FROM Raaka_aine WHERE id = :id LIMIT 1');
@@ -52,6 +56,7 @@ class Ingredient extends BaseModel {
         return null;
     }
 
+    //talletetaan raaka-aine tietokantaan.
     public function save() {
 
         $query = DB::connection()->prepare('INSERT INTO Raaka_aine (kayttaja, nimi, hinta, ravitsemustiedot) VALUES (:kayttaja, :nimi, :hinta, :ravitsemustiedot) RETURNING id');
@@ -62,30 +67,39 @@ class Ingredient extends BaseModel {
         $this->id = $row['id'];
     }
 
+    //muutetaan tämän id:n raaka-aineen nimeä, hintaa ja ravitsemustietoja.
     public static function edit($id, $nimi, $hinta, $ravitsemustiedot) {
 
         $query = DB::connection()->prepare('UPDATE Raaka_aine SET nimi = :nimi, hinta = :hinta, ravitsemustiedot = :ravitsemustiedot WHERE id = :id');
         $query->execute(array('id' => $id, 'nimi' => $nimi, 'hinta' => $hinta, 'ravitsemustiedot' => $ravitsemustiedot));
     }
 
+    //muutetaan tämän id:n nimeä.
     public static function editName($id, $nimi) {
 
         $query = DB::connection()->prepare('UPDATE Raaka_aine SET nimi = :nimi WHERE id = :id');
         $query->execute(array('id' => $id, 'nimi' => $nimi));
     }
 
+    //poistetaan tietokannasta sellaiset raaka-aineet, joiden id:tä ei löydy
+    //listasta ruokalajin aineksia, eli raaka-aineet, joiden ruokalaji on
+    //poistettu.
     public static function destroyByRecipe() {
 
         $query = DB::connection()->prepare('DELETE FROM Raaka_aine WHERE Raaka_aine.id NOT IN (SELECT raaka_aine FROM Ruokalajin_aines)');
         $query->execute();
     }
 
+    //poistetaan tämän id:n raaka-aine.
     public static function destroy($id) {
 
         $query = DB::connection()->prepare('DELETE FROM Raaka_aine WHERE id = :id');
         $query->execute(array('id' => $id));
     }
 
+    //tarkistetaan, löytyykö tietokannasta raaka-aine $attributes-taulukon
+    //arvoilla. Jos joo, palautetaan se, jos ei, palautetaan null.
+    //En taida käyttää tätä, mutten jaksa nyt ottaa selvää.
     public static function existingIngredientCheck($attributes) {
 
         $query = DB::connection()->prepare('SELECT * FROM Raaka_aine WHERE kayttaja = :kayttaja AND nimi = :nimi AND hinta = :hinta AND ravitsemustiedot = :ravitsemustiedot LIMIT 1');
@@ -107,6 +121,9 @@ class Ingredient extends BaseModel {
         return null;
     }
 
+    //jos tämän olion nimessä on häikkää, lisätään virheilmoituksia
+    //$errors-taulukkoon, jolloin tietokantaan ei tehdä
+    //lisäys- tai muokkaustoimintoja.
     public function validateName() {
 
         $errors = array();
@@ -121,26 +138,32 @@ class Ingredient extends BaseModel {
 
         return $errors;
     }
-    
+
+    //jos hinnassa on häikkää, lisätään virheilmoituksia
+    //$errors-taulukkoon, jolloin tietokantaan ei tehdä
+    //lisäys- tai muokkaustoimintoja.
     public function validatePrice() {
-        
+
         $errors = array();
-        
+
         if (strlen($this->hinta) > 20) {
             $errors[] = 'Käytä hinnan määrittelyssä enintään 20 merkkiä.';
         }
-        
+
         return $errors;
     }
-    
+
+    //jos ravitsemustiedoissa on häikkää, lisätään virheilmoituksia
+    //$errors-taulukkoon, jolloin tietokantaan ei tehdä
+    //lisäys- tai muokkaustoimintoja.
     public function validateInfo() {
-        
+
         $errors = array();
-        
+
         if (strlen($this->ravitsemustiedot) > 400) {
             $errors[] = 'Kerro raaka-aineen ravitsemustiedoista lyhyemmin (käytä max. 400 merkkiä).';
         }
-        
+
         return $errors;
     }
 

@@ -2,6 +2,7 @@
 
 class RecipeController extends BaseController {
 
+    //näyttää etusivun, eli reseptilistauksen
     public static function index() {
 
         $recipes = Recipe::all();
@@ -9,6 +10,7 @@ class RecipeController extends BaseController {
         View::make('recipe/recipes_list.html', array('recipes' => $recipes));
     }
 
+    //näyttää tämän id:n ruokalajin esittelysivun
     public static function showRecipe($id) {
 
         $recipe = Recipe::find($id);
@@ -17,6 +19,7 @@ class RecipeController extends BaseController {
         View::make('recipe/recipe_show.html', array('recipe' => $recipe, 'ingredients' => $ingredients));
     }
 
+    //näyttää tämän id:n ruokalajin muokkaussivun
     public static function editRecipe($id) {
 
         self::check_logged_in();
@@ -26,6 +29,8 @@ class RecipeController extends BaseController {
         View::make('recipe/recipe_edit.html', array('recipe' => $recipe));
     }
 
+    //näyttää tämän id:n ruokalajin reseptin (valmistusohjeiden)
+    //muokkaussivun
     public static function editRecipeInstructions($id) {
 
         self::check_logged_in();
@@ -37,6 +42,7 @@ class RecipeController extends BaseController {
         View::make('recipe/recipe_instructions_edit.html', array('recipe' => $recipe, 'ingredients' => $ingredients, 'instructions' => $instructions));
     }
 
+    //näyttää uuden ruokalajin lisäyssivun
     public static function newRecipe() {
 
         self::check_logged_in();
@@ -44,6 +50,11 @@ class RecipeController extends BaseController {
         View::make('recipe/recipe_new.html');
     }
 
+    //jos käyttäjä on antanut lisättävälle ruokalajille virheettömät
+    //parametrit JA tietokannasta ei jo löydy ruokalajia, jolla on samat
+    //tiedot (lisää-painiketta ei ole spämmitty), lisätään ruokalaji
+    //tietokantaan, muussa tapauksessa näytetään listaussivu lisäämättä
+    //mitään tai lisäyssivu, jolla virheilmoitukset
     public static function store() {
 
         self::check_logged_in();
@@ -75,6 +86,8 @@ class RecipeController extends BaseController {
         }
     }
 
+    //jos käyttäjä on antanut virheettömät parametrit, muokataan tämän id:n
+    //ruokalajin tietoja, muuten renderöidään muokkaussivu virheilmoituksineen.
     public static function updateRecipeInfo($id) {
 
         self::check_logged_in();
@@ -104,6 +117,9 @@ class RecipeController extends BaseController {
         }
     }
 
+    //jos reseptissä ei ole mitään häikkää (ei ole liian pitkä), muutetaan
+    //tämän id:n ruokalajin reseptiä ja viedään takaisin sen sivulle, muuten
+    //renderöidään muokkausnäkymä virheilmoituksien kanssa.
     public static function storeRecipe($id) {
 
         self::check_logged_in();
@@ -127,6 +143,7 @@ class RecipeController extends BaseController {
         }
     }
 
+    //näytetään tämän id:n ruokalajin poistonvahvistussivu
     public static function confirmDeletion($id) {
 
         self::check_logged_in();
@@ -136,6 +153,9 @@ class RecipeController extends BaseController {
         View::make('recipe/recipe_confirm_deletion.html', array('recipe' => $recipe));
     }
 
+    //poistetaan ensin ruokalajin aines, johon tämä ruokalaji liittyy, sitten
+    //tämä ruokalaji, ja lopuksi tälle ruokalajille lisätyt raaka-aineet.
+    //Uudelleenohjataan ruokalajin esittelysivulle.
     public static function destroyRecipe($id) {
 
         self::check_logged_in();

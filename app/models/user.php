@@ -8,6 +8,7 @@ class User extends BaseModel {
         parent::__construct($attributes);
     }
 
+    //etsitään tietokannasta käyttäjä tällä nimellä ja salasanalla
     public static function authenticate($username, $password) {
 
         $query = DB::connection()->prepare('SELECT * FROM Kayttaja WHERE nimi = :nimi AND salasana = :salasana LIMIT 1');

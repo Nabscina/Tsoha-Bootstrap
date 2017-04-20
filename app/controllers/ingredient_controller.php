@@ -2,6 +2,7 @@
 
 class IngredientController extends BaseController {
 
+    //näytetään tämän id:n raaka-aineen esittelysivu
     public static function showIngredient($id) {
 
         $ingredient = Ingredient::find($id);
@@ -10,6 +11,7 @@ class IngredientController extends BaseController {
         View::make('ingredient/ingredient_show.html', array('ingredient' => $ingredient, 'id' => $id, 'recipe' => $ri->ruokalaji));
     }
 
+    //näytetään tämän id:n raaka-aineen muokkaussivu
     public static function editIngredient($id) {
 
         self::check_logged_in();
@@ -19,6 +21,7 @@ class IngredientController extends BaseController {
         View::make('ingredient/ingredient_edit.html', array('ingredient' => $ingredient));
     }
 
+    //näytetään tämän id:n raaka-aineen muokkaussivu, jolla voi muokata nimeä ja määrää
     public static function editIngredientAmount($id) {
 
         self::check_logged_in();
@@ -29,6 +32,8 @@ class IngredientController extends BaseController {
         View::make('ingredient/ingredient_edit_amount.html', array('ingredient' => $ingredient, 'recipeingredient' => $recipeingredient));
     }
 
+    //näytetään raaka-aineen lisäyssivu, raaka-aine lisätään tämän id:n ruokalajille
+    //vaatii kirjautumisen, kuten kaikki check_logged_in()-funktiota kutsuvat
     public static function addIngredient($id) {
 
         self::check_logged_in();
@@ -38,6 +43,11 @@ class IngredientController extends BaseController {
         View::make('ingredient/ingredient_new.html', array('recipe' => $recipe));
     }
 
+    //jos käyttäjä antanut virheettömät syötteet JA tietokannasta ei löydy toista
+    //samankaltaista raaka-ainetta, joka on lisätty samalle ruokalajille (ei voi spämmätä
+    //lisää-painiketta), lisätään raaka-aine tietokantaan, muuten joko viedään
+    //samalle sivulle muttei lisätä mitään tai renderöidään lisäyssivu virheilmoitusten
+    //kera
     public static function store($id) {
 
         self::check_logged_in();
@@ -75,6 +85,9 @@ class IngredientController extends BaseController {
         }
     }
 
+    //jos virheettömät parametrit, muokataan tämän raaka-aineen tietoja sekä
+    //sitä ruokalajin ainesta, johon tämä raaka-aine liittyy, muuten
+    //näytetään muokkaussivu virheilmoituksineen
     public static function updateIngredientInfo($id) {
 
         self::check_logged_in();
@@ -100,6 +113,9 @@ class IngredientController extends BaseController {
         }
     }
 
+    //jos virheettömät parametrit, muutetaan raaka-aineen nimeä ja määrää,
+    //muutetaan siis sekä raaka-ainetta että ruokalajin ainesta
+    //muussa tapauksessa näytetään muokkaussivu virheilmoituksineen
     public static function updateIngredientNameAndAmount($id) {
 
         self::check_logged_in();
@@ -129,6 +145,8 @@ class IngredientController extends BaseController {
         }
     }
 
+    //etsitään ruokalajin aines, johon tämä raaka-aine liittyy, ja poistetaan ensin se,
+    //ja sitten vasta tämä raaka-aine. Uudelleenohjataan ruokalajin esittelysivulle.
     public static function destroyIngredient($id) {
 
         self::check_logged_in();
@@ -138,12 +156,15 @@ class IngredientController extends BaseController {
 
         recipeIngredient::destroyByIngredient($id);
         Ingredient::destroy($id);
-        
+
         $recipe = Recipe::find($idred);
 
         Redirect::to('/recipes/' . $idred, array('message' => 'Raaka-aine poistettu.', 'recipe' => $recipe));
     }
-
+    
+    //tarkistetaan, onko tietokannassa raaka-aine, joka on lisätty samalle ruokalajille
+    //ja jolla on sama nimi ja käyttäjä. Jos on, palautetaan sen ilmentymä, muuten
+    //null. Estää sen, että spämmäyslisääminen lisäisi tietokantaan useasti.
     public static function recipeIngredientCheck($id, $attributes) {
 
         $ret = null;

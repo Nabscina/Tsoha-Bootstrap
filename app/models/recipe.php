@@ -9,6 +9,8 @@ class Recipe extends BaseModel {
         $this->validators = array('validateName', 'validateMainIngredient', 'validateTime', 'validateRecipe');
     }
 
+    //listataan kaikki tietokannan ruokalajit, palautetaan taulukkona
+    //Ruokalaji-olioita.
     public static function all() {
 
         $query = DB::connection()->prepare('SELECT * FROM Ruokalaji');
@@ -34,6 +36,8 @@ class Recipe extends BaseModel {
         return $recipes;
     }
 
+    //etsitään tietokannasta ruokalaji tällä id:llä ja palautetaan se, jos se
+    //löytyi. Muuten palautetaan null.
     public static function find($id) {
 
         $query = DB::connection()->prepare('SELECT * FROM Ruokalaji WHERE id = :id LIMIT 1');
@@ -58,6 +62,7 @@ class Recipe extends BaseModel {
         return null;
     }
 
+    //talletetaan tietokantaan ruokalaji.
     public function save() {
 
         $query = DB::connection()->prepare('INSERT INTO Ruokalaji (kayttaja, nimi, ateriatyyppi, paaraaka_aine, vaikeustaso, valmistusaika, resepti) VALUES (:kayttaja, :nimi, :ateriatyyppi, :paaraaka_aine, :vaikeustaso, :valmistusaika, :resepti) RETURNING id');
@@ -68,24 +73,29 @@ class Recipe extends BaseModel {
         $this->id = $row['id'];
     }
 
+    //muokataan ruokalajin reseptiä käyttäjän kirjoittamaksi.
     public static function saveRecipe($id, $recipe) {
 
         $query = DB::connection()->prepare('UPDATE Ruokalaji SET resepti = :resepti WHERE id = :id');
         $query->execute(array('resepti' => $recipe, 'id' => $id));
     }
 
+    //muokataan ruokalajin tiedoiksi käyttäjän antamat tiedot.
     public static function updateInfo($id, $recipe) {
 
         $query = DB::connection()->prepare('UPDATE Ruokalaji SET nimi = :nimi, ateriatyyppi = :ateriatyyppi, paaraaka_aine = :paaraaka_aine, vaikeustaso = :vaikeustaso, valmistusaika = :valmistusaika WHERE id = :id');
         $query->execute(array('id' => $id, 'nimi' => $recipe['nimi'], 'ateriatyyppi' => $recipe['ateriatyyppi'], 'paaraaka_aine' => $recipe['paaraaka_aine'], 'vaikeustaso' => $recipe['vaikeustaso'], 'valmistusaika' => $recipe['valmistusaika']));
     }
 
+    //poistetaan tämän id:n ruokalaji tietokannasta.
     public static function destroy($id) {
 
         $query = DB::connection()->prepare('DELETE FROM Ruokalaji WHERE id = :id');
         $query->execute(array('id' => $id));
     }
 
+    //jos nimessä on häikkää, $errorsia ei palauteta tyhjänä eikä
+    //ruokalajia voida lisätä tietokantaan tai sitä ei voi muokata.
     public function validateName() {
 
         $errors = array();
@@ -101,6 +111,8 @@ class Recipe extends BaseModel {
         return $errors;
     }
 
+    //samoin jos pääraaka-aineessa on häikkää, lisäys- tai muokkaustoimintoja
+    // ei viedä loppuun.
     public function validateMainIngredient() {
 
         $errors = array();
@@ -134,6 +146,10 @@ class Recipe extends BaseModel {
         return $errors;
     }
 
+    //jos tietokannasta löytyy ruokalaji käyttäjän id:llä ja $attributes-
+    //taulukon arvoilla, palautetaan se, jolloin ruokalajin kontrollerissa
+    //jätetään uusi ruokalaji lisäämättä (ei voi spämmilisätä).
+    //muuten palautetaan null, ja lisäys voidaan tehdä.
     public static function existingRecipeCheck($attributes) {
 
         $query = DB::connection()->prepare('SELECT * FROM Ruokalaji WHERE kayttaja = :kayttaja AND nimi = :nimi AND ateriatyyppi = :ateriatyyppi AND paaraaka_aine = :paaraaka_aine AND vaikeustaso = :vaikeustaso AND valmistusaika = :valmistusaika LIMIT 1');
