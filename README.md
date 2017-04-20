@@ -15,7 +15,7 @@ Alkeellisia näkymiä:
 * [Raaka-aineen muokkaussivu](http://pebmatts.users.cs.helsinki.fi/tsoha/ingredients/30/edit)
 * [Raaka-aineen lisäyssivu](http://pebmatts.users.cs.helsinki.fi/tsoha/recipes/7/addingredient)
 
-Ohjaaja: valitettavasti kirjautumisen toteuttaminen jää ensi kertaan. Sivuilla voi siis lisäillä ja poistella mielin määrin, tietoa dokumentaatiossa.
+Ohjaaja: sain sivuille tällä hetkellä toteutetut toiminnot valmiiksi (ja toivottavasti toimiviksi), tee siis sivuilla mitä tahansa (tietoa dokumentaatiossa). Kirjaudu nimellä "kiljukettu" ja salasanalla "wasspord420".
 
 ## Työn aihe
 
