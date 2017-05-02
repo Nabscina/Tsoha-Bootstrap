@@ -8,6 +8,14 @@ $routes->get('/myrecipes', function() {
     RecipeController::userRecipes();
 });
 
+$routes->post('/register', function() {
+    UserController::handleRegistration();
+});
+
+$routes->get('/register', function() {
+    UserController::register();
+});
+
 $routes->post('/recipes', function() {
     RecipeController::store();
 });
