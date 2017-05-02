@@ -4,6 +4,10 @@ $routes->get('/', function() {
     RecipeController::index();
 });
 
+$routes->get('/myrecipes', function() {
+    RecipeController::userRecipes();
+});
+
 $routes->post('/recipes', function() {
     RecipeController::store();
 });

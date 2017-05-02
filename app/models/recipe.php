@@ -36,6 +36,31 @@ class Recipe extends BaseModel {
         return $recipes;
     }
 
+    public static function userAll() {
+
+        $query = DB::connection()->prepare('SELECT * FROM Ruokalaji WHERE kayttaja = :kayttaja');
+        $query->execute(array('kayttaja' => BaseController::get_user_logged_in()->id));
+
+        $rows = $query->fetchAll();
+
+        $recipes = array();
+
+        foreach ($rows as $row) {
+            $recipes[] = new Recipe(array(
+                'id' => $row['id'],
+                'kayttaja' => $row['kayttaja'],
+                'nimi' => $row['nimi'],
+                'ateriatyyppi' => $row['ateriatyyppi'],
+                'paaraaka_aine' => $row['paaraaka_aine'],
+                'vaikeustaso' => $row['vaikeustaso'],
+                'valmistusaika' => $row['valmistusaika'],
+                'resepti' => $row['resepti']
+            ));
+        }
+
+        return $recipes;
+    }
+
     //etsitään tietokannasta ruokalaji tällä id:llä ja palautetaan se, jos se
     //löytyi. Muuten palautetaan null.
     public static function find($id) {

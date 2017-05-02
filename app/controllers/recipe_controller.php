@@ -10,6 +10,15 @@ class RecipeController extends BaseController {
         View::make('recipe/recipes_list.html', array('recipes' => $recipes));
     }
 
+    public static function userRecipes() {
+
+        self::check_logged_in();
+
+        $recipes = Recipe::userAll();
+
+        View::make('recipe/recipes_list.html', array('recipes' => $recipes));
+    }
+
     //näyttää tämän id:n ruokalajin esittelysivun
     public static function showRecipe($id) {
 
