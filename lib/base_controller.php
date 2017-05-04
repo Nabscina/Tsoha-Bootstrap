@@ -47,12 +47,4 @@ class BaseController {
             HelloWorldController::whoops();
         }
     }
-
-    //kirjaa käyttäjän ulos.
-    public static function logout() {
-
-        $_SESSION['user'] = null;
-        Redirect::to('/login', array('message' => 'Olet kirjautunut ulos.'));
-    }
-
 }
