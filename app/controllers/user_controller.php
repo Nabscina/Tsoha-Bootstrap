@@ -54,5 +54,12 @@ class UserController extends BaseController {
             Redirect::to('/recipes', array('message' => 'Hei ' . $user->nimi . '!'));
         }
     }
+    
+    //kirjaa käyttäjän ulos.
+    public static function logout() {
+
+        $_SESSION['user'] = null;
+        Redirect::to('/login', array('message' => 'Olet kirjautunut ulos.'));
+    }
 
 }
