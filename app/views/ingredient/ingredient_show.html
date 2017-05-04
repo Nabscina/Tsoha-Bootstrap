@@ -11,8 +11,10 @@
 
 <h1>{{ingredient.nimi}}</h1>
 <p>
-    <a href="/tsoha/ingredients/{{ingredient.id}}/edit" class="btn btn-default">Muokkaa</a>
     <a href="/tsoha/recipes/{{recipe}}" class="btn btn-default">Takaisin</a>
+    {% if user_logged_in.id == ingredient.kayttaja %}
+    <a href="/tsoha/ingredients/{{ingredient.id}}/edit" class="btn btn-default">Muokkaa</a>
+    {% endif %}
 </p>
 <ul>
     <li><strong>Nimi:</strong> {{ingredient.nimi}}</li>
@@ -22,4 +24,7 @@
 <p>
     {{ingredient.ravitsemustiedot}}
 </p>
+<form method="post" action="{{base_path}}/shoppinglist/{{ingredient.id}}/add">
+    <button type="submit" class="btn btn-success btn-sm">Lisää ostoslistalle</button>
+</form>
 {% endblock %}

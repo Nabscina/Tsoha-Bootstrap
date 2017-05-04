@@ -25,7 +25,11 @@ class RecipeController extends BaseController {
         $recipe = Recipe::find($id);
         $ingredients = recipeIngredient::findByRecipe($id);
 
-        View::make('recipe/recipe_show.html', array('recipe' => $recipe, 'ingredients' => $ingredients));
+        if ($recipe) {
+            View::make('recipe/recipe_show.html', array('recipe' => $recipe, 'ingredients' => $ingredients));
+        } else {
+            View::make('helloworld.html');
+        }
     }
 
     //näyttää tämän id:n ruokalajin muokkaussivun
@@ -35,7 +39,14 @@ class RecipeController extends BaseController {
 
         $recipe = Recipe::find($id);
 
-        View::make('recipe/recipe_edit.html', array('recipe' => $recipe));
+        if ($recipe && $recipe->kayttaja) {
+            self::legit_action_check($recipe->kayttaja);
+        }
+        if ($recipe) {
+            View::make('recipe/recipe_edit.html', array('recipe' => $recipe));
+        } else {
+            View::make('helloworld.html');
+        }
     }
 
     //näyttää tämän id:n ruokalajin reseptin (valmistusohjeiden)
@@ -45,10 +56,16 @@ class RecipeController extends BaseController {
         self::check_logged_in();
 
         $recipe = Recipe::find($id);
-        $ingredients = recipeIngredient::findByRecipe($id);
-        $instructions = $recipe->resepti;
-
-        View::make('recipe/recipe_instructions_edit.html', array('recipe' => $recipe, 'ingredients' => $ingredients, 'instructions' => $instructions));
+        if ($recipe && $recipe->kayttaja) {
+            self::legit_action_check($recipe->kayttaja);
+        }
+        if ($recipe) {
+            $ingredients = recipeIngredient::findByRecipe($id);
+            $instructions = $recipe->resepti;
+            View::make('recipe/recipe_instructions_edit.html', array('recipe' => $recipe, 'ingredients' => $ingredients, 'instructions' => $instructions));
+        } else {
+            View::make('helloworld.html');
+        }
     }
 
     //näyttää uuden ruokalajin lisäyssivun
@@ -159,7 +176,15 @@ class RecipeController extends BaseController {
 
         $recipe = Recipe::find($id);
 
-        View::make('recipe/recipe_confirm_deletion.html', array('recipe' => $recipe));
+        if ($recipe && $recipe->kayttaja) {
+            self::legit_action_check($recipe->kayttaja);
+        }
+
+        if ($recipe) {
+            View::make('recipe/recipe_confirm_deletion.html', array('recipe' => $recipe));
+        } else {
+            View::make('helloworld.html');
+        }
     }
 
     //poistetaan ensin ruokalajin aines, johon tämä ruokalaji liittyy, sitten

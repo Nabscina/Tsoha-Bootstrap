@@ -1,11 +1,24 @@
 <?php
 
+$routes->post('/shoppinglist/:id/remove', function($id) {
+    ListController::remove($id);
+});
+
 $routes->get('/', function() {
     RecipeController::index();
 });
 
 $routes->get('/myrecipes', function() {
     RecipeController::userRecipes();
+});
+
+
+$routes->get('/shoppinglist', function() {
+    ListController::shoppingList();
+});
+
+$routes->post('/shoppinglist/:id/add', function($id) {
+    ListController::add($id);
 });
 
 $routes->post('/register', function() {

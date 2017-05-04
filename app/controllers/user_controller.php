@@ -28,6 +28,7 @@ class UserController extends BaseController {
 
         if (count($errors) == 0) {
             $user->save();
+            ListController::createNewList($user->id);
             Redirect::to('/login', array('message' => 'Rekisteröityminen onnistui, voit nyt kirjautua sisään.'));
         } else {
             View::make('user/register.html', array('errors' => $errors, 'username' => $user->nimi));

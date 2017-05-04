@@ -11,9 +11,11 @@
 
 <h1>Reseptit</h1>
 
+{% if user_logged_in %}
 <p>
     <a href="/tsoha/recipes/newrecipe" class="btn btn-success">Lisää resepti</a>
 </p>
+{% endif %}
 
 <table class="table table-striped table-bordered">
     <thead>
@@ -35,7 +37,11 @@
             <td>{{recipe.paaraaka_aine}}</td>
             <td>{{recipe.vaikeustaso}}</td>
             <td>{{recipe.valmistusaika}}</td>
+            {% if user_logged_in.id == recipe.kayttaja %}
             <td class="col-sm-1"><a class="btn btn-default btn-sm center-block" href="{{base_path}}/recipes/{{recipe.id}}/edit">Muokkaa</a></td>
+            {% else %}
+            <td></td>
+            {% endif %}        
         </tr>
         {% endfor %}
     </tbody>

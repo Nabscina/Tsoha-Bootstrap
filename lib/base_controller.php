@@ -21,6 +21,14 @@ class BaseController {
         }
     }
 
+    public static function legit_action_check($ownerid) {
+
+        if ($ownerid != self::get_user_logged_in()->id) {
+            $recipes = Recipe::all();
+            Redirect::to('/recipes', array('recipes' => $recipes));
+        }
+    }
+
     public static function logout() {
 
         $_SESSION['user'] = null;

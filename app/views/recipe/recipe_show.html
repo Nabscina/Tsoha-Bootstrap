@@ -11,9 +11,11 @@
 
 <h1>{{recipe.nimi}}</h1>
 <!-- Painikkeet tähän -->
+{% if user_logged_in.id == recipe.kayttaja %}
 <p>
     <a href="/tsoha/recipes/{{recipe.id}}/confirm_deletion" class="btn btn-danger">Poista</a> <a href="/tsoha/recipes/{{recipe.id}}/edit" class="btn btn-default">Muokkaa</a>
 </p>
+{% endif %}
 <!-- Tiedot tulee listana tähän -->
 <ul>
     <li><strong>Ateriatyyppi:</strong> {{recipe.ateriatyyppi}}</li>
@@ -36,17 +38,24 @@
         <tr>
             <td><a href="/tsoha/ingredients/{{ingredient.raaka_aine}}">{{ingredient.nimi}}</a></td>
             <td>{{ingredient.maara}}</td>
+            {% if user_logged_in.id == recipe.kayttaja %}
             <td class="col-sm-1"> <a class="btn btn-default btn-sm center-block" href="{{base_path}}/ingredients/{{ingredient.raaka_aine}}/editamount">Muokkaa</a></td>
             <td class="col-sm-1"> <form method="post" action="{{base_path}}/ingredients/{{ingredient.raaka_aine}}/destroy">
                     <button type="submit" class="btn btn-danger btn-sm center-block">Poista</button>
                 </form></td>
+            {% else %}
+            <td></td>
+            <td></td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>
 </table>
+{% if user_logged_in.id == recipe.kayttaja %}
 <p>
     <a href="/tsoha/recipes/{{recipe.id}}/addingredient" class="btn btn-success">Lisää raaka-aineita</a>
 </p>
+{% endif %}
 <br>
 <h4>Resepti:</h4>
 <div>
@@ -54,7 +63,9 @@
         <li>{{recipe.resepti}}</li>
     </ul>
 </div>
+{% if user_logged_in.id == recipe.kayttaja %}
 <p>
     <a href="/tsoha/recipes/{{recipe.id}}/editinstructions" class="btn btn-default">Muokkaa reseptiä</a>
 </p>
+{% endif %}
 {% endblock %}

@@ -7,8 +7,11 @@ class IngredientController extends BaseController {
 
         $ingredient = Ingredient::find($id);
         $ri = recipeIngredient::findByIngredient($id);
-
-        View::make('ingredient/ingredient_show.html', array('ingredient' => $ingredient, 'id' => $id, 'recipe' => $ri->ruokalaji));
+        if ($ri) {
+            View::make('ingredient/ingredient_show.html', array('ingredient' => $ingredient, 'id' => $id, 'recipe' => $ri->ruokalaji));
+        } else {
+            View::make('helloworld.html');
+        }
     }
 
     //näytetään tämän id:n raaka-aineen muokkaussivu
@@ -18,7 +21,15 @@ class IngredientController extends BaseController {
 
         $ingredient = Ingredient::find($id);
 
-        View::make('ingredient/ingredient_edit.html', array('ingredient' => $ingredient));
+        if ($ingredient && $ingredient->kayttaja) {
+            self::legit_action_check($ingredient->kayttaja);
+        }
+
+        if ($ingredient) {
+            View::make('ingredient/ingredient_edit.html', array('ingredient' => $ingredient));
+        } else {
+            View::make('helloworld.html');
+        }
     }
 
     //näytetään tämän id:n raaka-aineen muokkaussivu, jolla voi muokata nimeä ja määrää
@@ -27,9 +38,16 @@ class IngredientController extends BaseController {
         self::check_logged_in();
 
         $ingredient = Ingredient::find($id);
-        $recipeingredient = recipeIngredient::findByIngredient($id);
+        if ($ingredient && $ingredient->kayttaja) {
+            self::legit_action_check($ingredient->kayttaja);
+        }
 
-        View::make('ingredient/ingredient_edit_amount.html', array('ingredient' => $ingredient, 'recipeingredient' => $recipeingredient));
+        if ($ingredient) {
+            $recipeingredient = recipeIngredient::findByIngredient($id);
+            View::make('ingredient/ingredient_edit_amount.html', array('ingredient' => $ingredient, 'recipeingredient' => $recipeingredient));
+        } else {
+            View::make('helloworld.html');
+        }
     }
 
     //näytetään raaka-aineen lisäyssivu, raaka-aine lisätään tämän id:n ruokalajille
@@ -39,8 +57,15 @@ class IngredientController extends BaseController {
         self::check_logged_in();
 
         $recipe = Recipe::find($id);
+        if ($recipe && $recipe->kayttaja) {
+            self::legit_action_check($recipe->kayttaja);
+        }
 
-        View::make('ingredient/ingredient_new.html', array('recipe' => $recipe));
+        if ($recipe) {
+            View::make('ingredient/ingredient_new.html', array('recipe' => $recipe));
+        } else {
+            View::make('helloworld.html');
+        }
     }
 
     //jos käyttäjä antanut virheettömät syötteet JA tietokannasta ei löydy toista
@@ -146,7 +171,8 @@ class IngredientController extends BaseController {
     }
 
     //etsitään ruokalajin aines, johon tämä raaka-aine liittyy, ja poistetaan ensin se,
-    //ja sitten vasta tämä raaka-aine. Uudelleenohjataan ruokalajin esittelysivulle.
+    //ja sitten vasta tämä raaka-aine JOS muu kohde (ostoslista) ei käytä sitä.
+    //Uudelleenohjataan ruokalajin esittelysivulle.
     public static function destroyIngredient($id) {
 
         self::check_logged_in();
@@ -155,13 +181,13 @@ class IngredientController extends BaseController {
         $idred = $recipeingredient->ruokalaji;
 
         recipeIngredient::destroyByIngredient($id);
-        Ingredient::destroy($id);
+        Ingredient::destroyByRecipe();
 
         $recipe = Recipe::find($idred);
 
         Redirect::to('/recipes/' . $idred, array('message' => 'Raaka-aine poistettu.', 'recipe' => $recipe));
     }
-    
+
     //tarkistetaan, onko tietokannassa raaka-aine, joka on lisätty samalle ruokalajille
     //ja jolla on sama nimi ja käyttäjä. Jos on, palautetaan sen ilmentymä, muuten
     //null. Estää sen, että spämmäyslisääminen lisäisi tietokantaan useasti.

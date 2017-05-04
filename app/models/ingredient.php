@@ -86,7 +86,7 @@ class Ingredient extends BaseModel {
     //poistettu.
     public static function destroyByRecipe() {
 
-        $query = DB::connection()->prepare('DELETE FROM Raaka_aine WHERE Raaka_aine.id NOT IN (SELECT raaka_aine FROM Ruokalajin_aines)');
+        $query = DB::connection()->prepare('DELETE FROM Raaka_aine WHERE Raaka_aine.id NOT IN (SELECT raaka_aine FROM Ruokalajin_aines) AND Raaka_aine.id NOT IN (SELECT raaka_aine FROM Ostos)');
         $query->execute();
     }
 
