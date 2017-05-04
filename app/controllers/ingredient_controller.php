@@ -3,32 +3,38 @@
 class IngredientController extends BaseController {
 
     //näytetään tämän id:n raaka-aineen esittelysivu
+    //numeerisuustarkistus siltä varalta, että käyttäjä kirjoittaa osoiteriville
+    //id:n kohdalle jotain, joka ei sovi tietokantakyselyyn
+    //näytetään "virhesivu", jos jokin menee pieleen
     public static function showIngredient($id) {
+
+        self::parameterIsNumeric($id);
 
         $ingredient = Ingredient::find($id);
         $ri = recipeIngredient::findByIngredient($id);
         if ($ri) {
             View::make('ingredient/ingredient_show.html', array('ingredient' => $ingredient, 'id' => $id, 'recipe' => $ri->ruokalaji));
         } else {
-            View::make('helloworld.html');
+            HelloWorldController::whoops();
         }
     }
 
-    //näytetään tämän id:n raaka-aineen muokkaussivu
+    //näytetään tämän id:n raaka-aineen muokkaussivu, tarkistuksiin lukeutuu
+    //numeerisuustarkistuksen lisäksi kirjautumistarkistus ja katsotaan myös,
+    //saako kirjautunut käyttäjä muokata juuri tätä kohdetta, eli onko
+    //hän sen lisääjä. Näitä on muissakin funktioissa
     public static function editIngredient($id) {
 
         self::check_logged_in();
+        self::parameterIsNumeric($id);
 
         $ingredient = Ingredient::find($id);
 
-        if ($ingredient && $ingredient->kayttaja) {
-            self::legit_action_check($ingredient->kayttaja);
-        }
-
         if ($ingredient) {
+            self::legit_action_check($ingredient->kayttaja);
             View::make('ingredient/ingredient_edit.html', array('ingredient' => $ingredient));
         } else {
-            View::make('helloworld.html');
+            HelloWorldController::whoops();
         }
     }
 
@@ -36,17 +42,16 @@ class IngredientController extends BaseController {
     public static function editIngredientAmount($id) {
 
         self::check_logged_in();
+        self::parameterIsNumeric($id);
 
         $ingredient = Ingredient::find($id);
-        if ($ingredient && $ingredient->kayttaja) {
-            self::legit_action_check($ingredient->kayttaja);
-        }
 
         if ($ingredient) {
+            self::legit_action_check($ingredient->kayttaja);
             $recipeingredient = recipeIngredient::findByIngredient($id);
             View::make('ingredient/ingredient_edit_amount.html', array('ingredient' => $ingredient, 'recipeingredient' => $recipeingredient));
         } else {
-            View::make('helloworld.html');
+            HelloWorldController::whoops();
         }
     }
 
@@ -55,16 +60,15 @@ class IngredientController extends BaseController {
     public static function addIngredient($id) {
 
         self::check_logged_in();
+        self::parameterIsNumeric($id);
 
         $recipe = Recipe::find($id);
-        if ($recipe && $recipe->kayttaja) {
-            self::legit_action_check($recipe->kayttaja);
-        }
 
         if ($recipe) {
+            self::legit_action_check($recipe->kayttaja);
             View::make('ingredient/ingredient_new.html', array('recipe' => $recipe));
         } else {
-            View::make('helloworld.html');
+            HelloWorldController::whoops();
         }
     }
 
@@ -155,6 +159,7 @@ class IngredientController extends BaseController {
 
         $ri = new recipeIngredient($riattributes);
         $i = new Ingredient($iattributes);
+        
         $errors = array_merge($ri->errors(), $i->errors());
 
         $recipeingredient = recipeIngredient::findByIngredient($id);
@@ -171,7 +176,7 @@ class IngredientController extends BaseController {
     }
 
     //etsitään ruokalajin aines, johon tämä raaka-aine liittyy, ja poistetaan ensin se,
-    //ja sitten vasta tämä raaka-aine JOS muu kohde (ostoslista) ei käytä sitä.
+    //ja sitten mahdollisesti käyttämättömiksi jääneet raaka-aineet.
     //Uudelleenohjataan ruokalajin esittelysivulle.
     public static function destroyIngredient($id) {
 
@@ -181,7 +186,7 @@ class IngredientController extends BaseController {
         $idred = $recipeingredient->ruokalaji;
 
         recipeIngredient::destroyByIngredient($id);
-        Ingredient::destroyByRecipe();
+        Ingredient::destroyUseless();
 
         $recipe = Recipe::find($idred);
 

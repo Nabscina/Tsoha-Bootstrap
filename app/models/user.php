@@ -48,6 +48,8 @@ class User extends BaseModel {
         return null;
     }
 
+    //etsitään käyttäjä tällä nimellä. Tämä on sitä varten, ettei
+    //käyttäjä pääse rekisteröimään käytössä olevaa tunnusta.
     public static function findByUsername($username) {
 
         $query = DB::connection()->prepare('SELECT * FROM Kayttaja WHERE nimi = :nimi LIMIT 1');
@@ -66,6 +68,7 @@ class User extends BaseModel {
         return null;
     }
 
+    //lisätään uusi käyttäjä tietokantaan.
     public function save() {
 
         $query = DB::connection()->prepare('INSERT INTO Kayttaja (nimi, salasana) VALUES (:nimi, :salasana) RETURNING id');
@@ -76,6 +79,8 @@ class User extends BaseModel {
         $this->id = $row['id'];
     }
 
+    //katsotaan, että käyttäjän valitsema nimi on pituudeltaan sopiva
+    //ja että se ei jo ole toisen käyttäjän käytössä.
     public function validateName() {
 
         $errors = array();
@@ -91,6 +96,7 @@ class User extends BaseModel {
         return $errors;
     }
 
+    //katsotaan, että salasana vastaa pituusvaatimuksia.
     public function validatePassword() {
 
         $errors = array();

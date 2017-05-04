@@ -8,6 +8,8 @@ class ShoppingList extends BaseModel {
         parent::__construct($attributes);
     }
 
+    //etsitään kaikki tämän lista-id:n raaka-aineet, jotta voidaan listata
+    //ne käyttäjälle. Palautetaan siis Ingredient-olioina.
     public static function findAll($listid) {
 
         $query = DB::connection()->prepare('SELECT * FROM Raaka_aine WHERE Raaka_aine.id IN (SELECT raaka_aine FROM Ostos WHERE ostoslista = :ostoslista)');
@@ -30,6 +32,7 @@ class ShoppingList extends BaseModel {
         return $items;
     }
 
+    //palautetaan se ostoslista, joka kuuluu tälle käyttäjä-id:lle.
     public static function find($userid) {
 
         $query = DB::connection()->prepare('SELECT * FROM Ostoslista WHERE kayttaja = :kayttaja LIMIT 1');
@@ -48,6 +51,9 @@ class ShoppingList extends BaseModel {
         return null;
     }
 
+    //etsitään Ostos-taulusta tällä lista-id:llä ja raaka-aineella,
+    //ja palautetaan ListItem-olio, jos jotain löytyi. Tämä on sitä varten,
+    //ettei samaa raaka-ainetta lisätä samalle listalle useasti.
     public static function findExisting($listid, $ingredientid) {
 
         $query = DB::connection()->prepare('SELECT * FROM Ostos WHERE ostoslista = :ostoslista AND raaka_aine = :raaka_aine LIMIT 1');
@@ -66,6 +72,8 @@ class ShoppingList extends BaseModel {
         return null;
     }
 
+    //luodaan uusi ostoslista sille käyttäjälle, joka on lisätty tälle
+    //ShoppingList-oliolle.
     public function save() {
 
         $query = DB::connection()->prepare('INSERT INTO Ostoslista (kayttaja) VALUES (:kayttaja) RETURNING id');
@@ -76,6 +84,7 @@ class ShoppingList extends BaseModel {
         $this->id = $row['id'];
     }
 
+    //lisätään tämän id:n ostoslistalle tämän id:n raaka-aine. 
     public static function addToList($id, $listid) {
 
         $query = DB::connection()->prepare('INSERT INTO Ostos (ostoslista, raaka_aine) VALUES (:ostoslista, :raaka_aine)');

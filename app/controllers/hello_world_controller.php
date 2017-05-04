@@ -7,6 +7,14 @@ class HelloWorldController extends BaseController {
         echo 'Tämä ei ole etusivu!';
     }
 
+    //sivu, jolle päädytään, kun käyttäjä yrittää tehdä jotain hassua
+    //osoiterivillä. Ei kovin informatiivinen, koska itse olen päässyt
+    //tälle sivulle ainoastaan osoiterivin kautta hassuilla parametreillä.
+    public static function whoops() {
+
+        View::make('helloworld.html');
+    }
+
     public static function sandbox() {
 
         $recipe = new Recipe(array(

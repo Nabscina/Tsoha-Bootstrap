@@ -82,9 +82,9 @@ class Ingredient extends BaseModel {
     }
 
     //poistetaan tietokannasta sellaiset raaka-aineet, joiden id:tä ei löydy
-    //listasta ruokalajin aineksia, eli raaka-aineet, joiden ruokalaji on
-    //poistettu.
-    public static function destroyByRecipe() {
+    //listasta ruokalajin aineksia tai kenenkään ostoslistalta,
+    //eli käyttämättömät raaka-aineet.
+    public static function destroyUseless() {
 
         $query = DB::connection()->prepare('DELETE FROM Raaka_aine WHERE Raaka_aine.id NOT IN (SELECT raaka_aine FROM Ruokalajin_aines) AND Raaka_aine.id NOT IN (SELECT raaka_aine FROM Ostos)');
         $query->execute();

@@ -8,6 +8,7 @@ class UserController extends BaseController {
         View::make('user/login.html');
     }
 
+    //näytetään rekisteröitymissivu.
     public static function register() {
 
         if (self::get_user_logged_in()) {
@@ -17,6 +18,8 @@ class UserController extends BaseController {
         View::make('user/register.html');
     }
 
+    //hoidetaan rekisteröityminen ja lisätään käyttäjä tietoineen
+    //tietokantaan, jos virheitä ei ole.
     public static function handleRegistration() {
 
         $params = $_POST;

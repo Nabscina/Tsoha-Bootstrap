@@ -36,6 +36,7 @@ class Recipe extends BaseModel {
         return $recipes;
     }
 
+    //listataan kaikki kirjautuneen käyttäjän omat reseptit
     public static function userAll() {
 
         $query = DB::connection()->prepare('SELECT * FROM Ruokalaji WHERE kayttaja = :kayttaja');

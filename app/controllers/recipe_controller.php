@@ -10,6 +10,7 @@ class RecipeController extends BaseController {
         View::make('recipe/recipes_list.html', array('recipes' => $recipes));
     }
 
+    //näyttää sivun, jolla listataan käyttäjän itsensä lisäämät reseptit
     public static function userRecipes() {
 
         self::check_logged_in();
@@ -22,49 +23,54 @@ class RecipeController extends BaseController {
     //näyttää tämän id:n ruokalajin esittelysivun
     public static function showRecipe($id) {
 
+        self::parameterIsNumeric($id);
+
         $recipe = Recipe::find($id);
         $ingredients = recipeIngredient::findByRecipe($id);
 
         if ($recipe) {
             View::make('recipe/recipe_show.html', array('recipe' => $recipe, 'ingredients' => $ingredients));
         } else {
-            View::make('helloworld.html');
+            HelloWorldController::whoops();
         }
     }
 
-    //näyttää tämän id:n ruokalajin muokkaussivun
+    //näyttää tämän id:n ruokalajin muokkaussivun. Tässä ja joissain muissa
+    //funktioissa tarkistetaan, että käyttäjällä on oikeus tehdä näin
+    //siltä varalta, että hän yrittää päästä esimerkiksi muokkaussivulle osoiteriviltä.
+    //Katsotaan myös, onko tällöin annettu id numeerinen.
     public static function editRecipe($id) {
 
         self::check_logged_in();
+        self::parameterIsNumeric($id);
 
         $recipe = Recipe::find($id);
 
-        if ($recipe && $recipe->kayttaja) {
-            self::legit_action_check($recipe->kayttaja);
-        }
         if ($recipe) {
+            self::legit_action_check($recipe->kayttaja);
             View::make('recipe/recipe_edit.html', array('recipe' => $recipe));
         } else {
-            View::make('helloworld.html');
+            HelloWorldController::whoops();
         }
     }
 
     //näyttää tämän id:n ruokalajin reseptin (valmistusohjeiden)
-    //muokkaussivun
+    //muokkaussivun tai "virhesivun", jos jotain menee mönkään
+    //(todennäköisesti sählätty osoiterivillä)
     public static function editRecipeInstructions($id) {
 
         self::check_logged_in();
+        self::parameterIsNumeric($id);
 
         $recipe = Recipe::find($id);
-        if ($recipe && $recipe->kayttaja) {
-            self::legit_action_check($recipe->kayttaja);
-        }
+
         if ($recipe) {
+            self::legit_action_check($recipe->kayttaja);
             $ingredients = recipeIngredient::findByRecipe($id);
             $instructions = $recipe->resepti;
             View::make('recipe/recipe_instructions_edit.html', array('recipe' => $recipe, 'ingredients' => $ingredients, 'instructions' => $instructions));
         } else {
-            View::make('helloworld.html');
+            HelloWorldController::whoops();
         }
     }
 
@@ -153,10 +159,12 @@ class RecipeController extends BaseController {
         $params = $_POST;
 
         $instructions = $params['resepti'];
+        
         $recipe = new Recipe(array('nimi' => 'kek',
             'paaraaka_aine' => 'lel',
             'valmistusaika' => '1000h',
             'resepti' => $instructions));
+        
         $errors = $recipe->errors();
 
         if (count($errors) == 0) {
@@ -173,22 +181,20 @@ class RecipeController extends BaseController {
     public static function confirmDeletion($id) {
 
         self::check_logged_in();
+        self::parameterIsNumeric($id);
 
         $recipe = Recipe::find($id);
 
-        if ($recipe && $recipe->kayttaja) {
-            self::legit_action_check($recipe->kayttaja);
-        }
-
         if ($recipe) {
+            self::legit_action_check($recipe->kayttaja);
             View::make('recipe/recipe_confirm_deletion.html', array('recipe' => $recipe));
         } else {
-            View::make('helloworld.html');
+            HelloWorldController::whoops();
         }
     }
 
     //poistetaan ensin ruokalajin aines, johon tämä ruokalaji liittyy, sitten
-    //tämä ruokalaji, ja lopuksi tälle ruokalajille lisätyt raaka-aineet.
+    //tämä ruokalaji, ja lopuksi mahdollisesti käyttämättömiksi jääneet raaka-aineet.
     //Uudelleenohjataan ruokalajin esittelysivulle.
     public static function destroyRecipe($id) {
 
@@ -196,7 +202,7 @@ class RecipeController extends BaseController {
 
         recipeIngredient::destroyByRecipe($id);
         Recipe::destroy($id);
-        Ingredient::destroyByRecipe();
+        Ingredient::destroyUseless();
 
         Redirect::to('/recipes', array('message' => 'Ruokalaji poistettu.'));
     }

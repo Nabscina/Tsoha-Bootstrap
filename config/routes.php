@@ -1,9 +1,5 @@
 <?php
 
-$routes->post('/shoppinglist/:id/remove', function($id) {
-    ListController::remove($id);
-});
-
 $routes->get('/', function() {
     RecipeController::index();
 });
@@ -19,6 +15,10 @@ $routes->get('/shoppinglist', function() {
 
 $routes->post('/shoppinglist/:id/add', function($id) {
     ListController::add($id);
+});
+
+$routes->post('/shoppinglist/:id/remove', function($id) {
+    ListController::remove($id);
 });
 
 $routes->post('/register', function() {

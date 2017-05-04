@@ -8,6 +8,8 @@ class ListItem extends BaseModel {
         parent::__construct($attributes);
     }
 
+    //etsitään Ostos-taulusta tällä raaka-aineen id:llä. Palautetaan, jos
+    //sellainen on.
     public static function findByIngredient($ingredient) {
 
         $query = DB::connection()->prepare('SELECT * FROM Ostos WHERE raaka_aine = :raaka_aine LIMIT 1');
@@ -26,6 +28,7 @@ class ListItem extends BaseModel {
         return null;
     }
 
+    //poistetaan Ostos-taulusta tällä ostoslistan ja raaka-aineen id:llä.
     public static function destroy($listid, $ingredient) {
 
         $query = DB::connection()->prepare('DELETE FROM Ostos WHERE ostoslista = :ostoslista AND raaka_aine = :raaka_aine');
